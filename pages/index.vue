@@ -124,6 +124,30 @@ export default {
           content:
             'WORK EXPERIENCE, PROJECTS, INFORMATION, EDUCATION, AWARDS Information',
         },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:url', content: 'https://kschoi.netlify.app/' },
+        { property: 'og:title', content: '[Resume] Kyongsik Choi' },
+        {
+          property: 'og:description',
+          content:
+            'WORK EXPERIENCE, PROJECTS, INFORMATION, EDUCATION, AWARDS Information',
+        },
+        {
+          property: 'og:image',
+          content: 'https://kschoi.netlify.app/profile.jpg',
+        },
+        { property: 'twitter:card', content: 'summary_large_image' },
+        { property: 'twitter:url', content: 'https://kschoi.netlify.app/' },
+        { property: 'twitter:title', content: '[Resume] Kyongsik Choi' },
+        {
+          property: 'twitter:description',
+          content:
+            'WORK EXPERIENCE, PROJECTS, INFORMATION, EDUCATION, AWARDS Information',
+        },
+        {
+          property: 'twitter:image',
+          content: 'https://kschoi.netlify.app/profile.jpg',
+        },
       ],
       link: [{ rel: 'favicon', href: 'favicon.ico' }],
     }
