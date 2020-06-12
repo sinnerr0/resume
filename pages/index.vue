@@ -5,17 +5,19 @@
         <v-card-text>
           <v-container fluid>
             <v-row class="align-center">
-              <v-col class="d-flex-column">
+              <v-col>
                 <div class="text-h3 text-uppercase blue--text font-weight-bold">{{ name }}</div>
                 <div class="text-h5">{{ position }}</div>
+                <div>
+                  <v-chip v-for="(tag, i) of tags" outlined :key="i" class="ma-1">{{ tag }}</v-chip>
+                </div>
               </v-col>
-              <v-col class="d-flex">
-                <v-spacer></v-spacer>
+              <v-col class="d-flex flex-grow-0">
                 <v-avatar size="100">
                   <v-img src="profile.jpg"></v-img>
                 </v-avatar>
               </v-col>
-              <v-col style="border-left: 1px solid rgba(0, 0, 0, 0.08);">
+              <v-col class="flex-grow-0" style="border-left: 1px solid rgba(0, 0, 0, 0.08);">
                 <div class="d-flex align-center">
                   <v-icon class="mr-3">mdi-cellphone</v-icon>
                   <v-btn text :href="`tel:${tel}`">{{ tel }}</v-btn>
@@ -54,11 +56,7 @@
                           </v-avatar>
                         </template>
                         <v-divider></v-divider>
-                        <div>
-                          {{ experience.when }}&nbsp;|&nbsp;{{
-                          experience.where
-                          }}
-                        </div>
+                        <div>{{ experience.when }}&nbsp;|&nbsp;{{ experience.where }}</div>
                         <div>{{ experience.position }}</div>
                         <div>{{ experience.role }}</div>
                       </v-timeline-item>
@@ -74,17 +72,23 @@
                       <v-expansion-panel
                         v-for="(item, i) in self[title.toLowerCase()]"
                         :key="i"
-                        :readonly="!(item.contents.length || item.img.length)"
+                        :readonly="!hasContents(item)"
                       >
-                        <v-expansion-panel-header>
-                          <div class="d-flex justify-space-between">
-                            <span>{{ item.title }}</span>
-                            <span>{{ item.date }}</span>
+                        <v-expansion-panel-header :hide-actions="!hasContents(item)">
+                          <div class="d-flex align-center">
+                            <v-avatar v-if="item.logo" tile size="40" class="mr-3">
+                              <v-img :src="item.logo"></v-img>
+                            </v-avatar>
+                            <span class="flex-grow-1">{{ item.title }}</span>
+                            <span class="flex-shrink-0">{{ item.date }}</span>
                           </div>
                         </v-expansion-panel-header>
                         <v-expansion-panel-content>
                           <template v-if="item.contents && item.contents.length">
-                            <div v-for="(content, i) of item.contents" :key="i">{{ content }}</div>
+                            <div v-for="(content, i) of item.contents" :key="i">
+                              <a v-if="isLink(content)" :href="content">{{ content }}</a>
+                              <span v-else>{{ content }}</span>
+                            </div>
                           </template>
                           <template v-if="item.img && item.contents.length">
                             <v-img v-for="(img, i) of item.img" :key="i" :src="img"></v-img>
@@ -153,12 +157,39 @@ export default {
     }
   },
 
+  methods: {
+    hasContents(item) {
+      return (
+        (item.contents && item.contents.length) || (item.img && item.img.length)
+      )
+    },
+    isLink(text) {
+      return /^https?:\/\//.test(text)
+    },
+  },
+
   data() {
     const self = this
     return {
       self,
       name: 'Kyongsik Choi',
       position: 'Senior Software Engineer',
+      tags: [
+        'Web',
+        'Javascript',
+        'HTML',
+        'CSS',
+        'jQuery',
+        'ReactJS',
+        'Vue.js',
+        'Angular',
+        'Node.js',
+        'Frontend',
+        'Backend',
+        'Java',
+        'Git',
+        'SVN',
+      ],
       tel: '010-9261-1248',
       email: 'sinnerr0@gmail.com',
       linkedin:
@@ -207,10 +238,10 @@ export default {
           role: 'Research based on MPEG-V standard and Software dev.',
         },
       ],
-      titles: ['PROJECTS', 'INFORMATION', 'EDUCATION', 'AWARDS'],
+      titles: ['PROJECTS', 'CERTIFICATION', 'PATENT', 'EDUCATION', 'AWARDS'],
       projects: [
         {
-          title: 'AI Service Product Develop',
+          title: 'AI Service Product Development',
           date: '2019. 06 - Present',
           contents: [
             '내용: Web Service dev',
@@ -468,32 +499,137 @@ export default {
           ],
         },
       ],
-      information: [
+      education: [
         {
-          title: '',
-          date: '',
+          logo:
+            'https://media-exp1.licdn.com/dms/image/C560BAQHaLqTJx7luBw/company-logo_200_200/0?e=1600905600&v=beta&t=7IjVcNE93fA5J5k5-C1TRz7skwBLNRYTN40tJ9pPZ3Q',
+          title: '명지대학교 공학 석사',
+          date: '2011 - 2013',
+          contents: [
+            '[논문] 옥외운동기구용 자동 운동횟수 측정과 칼로리 소모량 계산 방법',
+            '2013. 08',
+            'http://www.riss.kr/link?id=T13234477',
+            '[초록(Abstract)] 본 논문에서는 3축 가속도계를 이용하여 다양한 사용자에게 적응하고 신뢰성 있는 운동 횟수와 칼로리 소모량을 구하는 알고리즘을 제안한다. 이 알고리즘은 네 가지 옥외운동기구에서 운동횟수를 자동으로 측정하고, 운동 후 칼로리 소모량을 계산하는 방법이다. 제안된 알고리즘이 다양한 운동 패턴에 대해 적용될 수 있도록 48가지 실험 패턴에서 192개의 운동 데이터를 획득하였다. 운동 횟수 알고리즘은 잡음 임계값(Threshold)과 팽창(Dilation), 침식(Erosion)을 이용하여 운동 영역을 검출하고, Otsu’s 방법을 이용하여 운동 영역별로 운동 횟수를 구하였다. 획득된 운동 데이터를 이용하여 제안된 알고리즘으로 계산된 운동횟수와 실제 운동횟수를 비교하여 정확도를 측정한 결과, 평균 97.22%의 정확도를 보였고 올바른 운동 방법 제시 후 재실험 한 결과, 평균 99.75%의 운동횟수 정확도를 보였다. 칼로리 소모량은 무게중심의 위치 변화를 이용한 방법과 운동기구의 회전각을 측정하는 방법으로 계산하였고, 세 가지 운동기구에 대해서 실험을 실시하였다. 무게중심의 위치 변화를 이용한 방법은 가속도계를 신체의 무게중심에 부착하고, 가속도 데이터를 적분하여 이동거리를 구하여 운동 시 소비한 칼로리를 계산하였다. 그리고 운동 시 촬영된 위치 변화 영상을 분석하여 측정된 거리로부터 소모 칼로리를 계산하여 비교한 결과 평균 3.27%의 오차율을 보였다. 회전각을 측정하는 방법에서는 운동기구에서 회전하는 곳에 가속도 센서를 부착하고, 가속도 데이터를 이용하여 사용자의 무게중심의 위치 변화를 계산하였으며, 운동 시 촬영된 영상을 분석하여 측정된 거리로부터 소모 칼로리를 계산하여 비교한 결과 평균 5.79%의 오차율을 보였다. 마지막으로 운동횟수와 칼로리 소모량을 동시에 측정하기 위하여, 회전각 측정 방법에서 획득된 가속도 데이터를 이용하여 운동횟수를 계산해 본 결과 평균 98.75%의 정확도를 보였다.',
+          ],
+          img: [],
+        },
+        {
+          logo:
+            'https://media-exp1.licdn.com/dms/image/C560BAQHaLqTJx7luBw/company-logo_200_200/0?e=1600905600&v=beta&t=7IjVcNE93fA5J5k5-C1TRz7skwBLNRYTN40tJ9pPZ3Q',
+          title: '명지대학교 공학 학사',
+          date: '2004 - 2011',
+          contents: [],
+          img: [],
+        },
+        {
+          title: 'Smart TV 솔루션 개발자 과정',
+          date: '2013. 11 - 2014. 04',
+          contents: [
+            '교육기관: 케티파트너스',
+            '교육내용: 리눅스 시스템 및 커널, 디바이스 드라이버, 안드로이드 Hybrid App, LG 스마트 TV, 삼성 스마트 TV App 개발',
+          ],
+          img: [],
+        },
+        {
+          title: '국가 R&D 참여 이공계 석박사 대학원생 연구 심화 과정',
+          date: '2012. 12',
+          contents: [
+            '교육기관: 연구개발인력교육원',
+            '교육내용: 창의적 사고개발, 미래예측과 기술예측 방법 습득, 특허전략에 대한 기본개념 숙지 및 활용방안 습득',
+          ],
+          img: [],
+        },
+        {
+          title: '국가 R&D 참여 이공계 석박사 대학원생 연구 기본 과정',
+          date: '2012. 10',
+          contents: [
+            '교육기관: 연구개발인력교육원',
+            '교육내용: 국가 R&D사업 : 높고 넓게 이해하기, R&D 수행 : R&D전주기 훑어보기, R&D 시작 : 연구주제 접근하기',
+          ],
+          img: [],
+        },
+        {
+          title: '모바일 개발자 과정',
+          date: '2011. 06 - 2011. 10',
+          contents: [
+            '교육기관: 한국데이터베이스진흥원',
+            '교육내용: 안드로이드 개발 환경과 SDK를 활용한 학습을 통해 안드로이드폰 App 개발 능력을 습득하고, 실제 안드로이드폰에 탑재 및 구현',
+          ],
+          img: [],
+        },
+      ],
+      certification: [
+        {
+          logo: 'http://www.hrdkorea.or.kr/main/images/common/m_hrdlogo.png',
+          title: '정보처리기사 (한국산업인력공단)',
+          date: '2010. 07',
+          contents: [],
+          img: [],
+        },
+        {
+          logo:
+            'https://media-exp1.licdn.com/dms/image/C4D0BAQG8U0EaYqTApg/company-logo_200_200/0?e=1600905600&v=beta&t=VzhEjUSomk3LSL2-gzwpgz1VuulqtqDLGN1F4AngXF0',
+          title: 'SCJP(Sun Certified Java Programmer) (Sun Microsystems)',
+          date: '2010. 06',
+          contents: [],
+          img: [],
+        },
+        {
+          logo:
+            'https://media-exp1.licdn.com/dms/image/C4D0BAQG8U0EaYqTApg/company-logo_200_200/0?e=1600905600&v=beta&t=VzhEjUSomk3LSL2-gzwpgz1VuulqtqDLGN1F4AngXF0',
+          title:
+            'SCWCD(Sun Certified Web Component Developer) (Sun Microsystems)',
+          date: '2010. 06',
           contents: [],
           img: [],
         },
       ],
-      education: [
+      patent: [
         {
-          title: '',
-          date: '',
-          contents: [],
+          title: '운동량 측정 방법 및 장치 및 이를 이용하는 운동기구',
+          date: '(등록) 2014. 09. 11',
+          contents: [
+            '특허청: 대한민국',
+            '특허/출원번호: 1020130085271',
+            'https://goo.gl/Lr6Bjz',
+            '운동량을 측정하기 위한 방법 및 장치 및 이를 이용하는 운동기구가 개시된다. 개시된 운동량 측정 방법은 운동기구 상에 위치하는 가속도 센서로부터 가속도 측정값을 획득하는 단계; 측정값을 기초로 운동구간을 결정하는 단계; 운동구간에 대하여 소정의 임계범위를 결정하는 단계; 및 운동구간 내에서 측정값이 임계범위를 벗어나는 횟수를 기초로 하여 운동 횟수를 산출하는 단계를 포함함으로써, 사용자가 센서를 휴대하는 불편 없이 높은 정확도로 운동량을 측정할 수 있게 하는 장점을 제공한다.',
+          ],
+          img: [],
+        },
+        {
+          title: '센서 정보와 헬스 아바타를 이용한 운동 관리 시스템',
+          date: '(Publication) 2013. 08. 08',
+          contents: [
+            '특허청: 대한민국',
+            '특허/출원번호: PCT/KR2012/003412',
+            'http://www.google.com/patents/WO2013115432A1?cl=ko',
+            '본 발명은 운동기구에 부착된 센서들로부터 획득된 정보를 바탕으로 운동량을 측정하고, 헬스 아바타를 이용하여 운동 효과를 효과적으로 사용자에게 보여주며, 사용자 맞춤형 운동 추천 및 트레이너 서비스를 제공하는 운동 관리 시스템에 관한 것이다. 본 발명은 다양한 센서들을 이용하여 운동기구에서 운동하는 운동량을 측정하고, 측정된 운동량과 사용자의 정보 등을 바탕으로 사용자 맞춤형 운동을 추천하며, 헬스 아바타를 통해 효과적으로 운동 효과를 체험할 수 있는 운동 관리 서비스를 제공하고자 한다. 본 발명에 의하면, 여러가지 종류의 센서로부터 획득된 센서 정보를 바탕으로 운동량을 측정하는 방법과 헬스 아바타를 이용하여 운동 효과를 사용자에게 효과적으로 제공하며, 측정된 운동량과 사용자의 신체 및 선호 정보 등을 바탕으로 사용자 맞춤형 운동 추천 및 트레이닝 정보를 자동으로 제공함으로써, 사용자에게 효과적인 운동 관리 서비스를 제공할 수 있다.',
+          ],
+          img: [],
+        },
+        {
+          title: '부동산 경매물건 검색 및 평가 시스템',
+          date: '(거절) 2012. 12. 03',
+          contents: [
+            '특허청: 대한민국',
+            '특허/출원번호: 1020120138814',
+            'https://goo.gl/jXTaCn',
+            '본 발명은 부동산 경매물건 검색 및 평가 시스템에 관한 것으로서, 부동산 법원 경매물건의 검색 시, 사용자가 최적의 경매물건을 빠르게 선택할 수 있도록 경매물건의 위험도와 기회도를 평가하여 제공하고, 부동산 법원 경매에 지식이 부족한 사용자에게는 기회도와 위험도의 평가 분석된 코멘트를 제공하도록 함에 그 목적이 있다. 이러한 목적을 달성하기 위한 본 발명은, 부동산 경매물건 검색 및 평가 시스템에 관한 것으로서, 유선 또는 무선 통신을 이용하여 평가 장치와 정보를 송수신하는 온라인 접속 장치; 상기 온라인 접속 장치의 요청신호에 따라, 부동산 경매물건에 관한 검색 결과 정보를 제공하며, 권리분석, 위험도 및 기회도를 평가하고 상기 온라인 접속 장치로 제공하는 평가 장치; 및 부동산 경매물건에 관한 정보 및 상기 부동산 경매물건에 관한 권리분석 결과 정보와, 위험도 및 기회도 평가 결과 정보를 저장하고 있으며, 상기 평가 장치로부터 수신된 요청신호에 따라 정보를 제공하는 데이터베이스 장치; 를 포함한다.',
+          ],
           img: [],
         },
       ],
       awards: [
         {
-          title: '2010 Computer Engineering Creative Sense 학술제 우수상',
-          date: '2010. 12 명지대학교컴퓨터공학과',
+          title:
+            '2010 Computer Engineering Creative Sense 학술제 우수상(명지대학교컴퓨터공학과)',
+          date: '2010. 12',
           contents: [],
           img: [],
         },
         {
-          title: '2010 교내 캡스톤디자인 프로젝트 경진대회 금상',
-          date: '2010. 12 명지대학교',
+          title: '2010 교내 캡스톤디자인 프로젝트 경진대회 금상(명지대학교)',
+          date: '2010. 12',
           contents: [],
           img: [],
         },
