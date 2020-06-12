@@ -1,4 +1,7 @@
 module.exports = {
-  css: ["@/assets/main.scss"],
-  buildModules: ["@nuxtjs/vuetify"],
-};
+  build: {
+    extractCSS: true,
+  },
+  css: ['@/assets/main.scss'],
+  buildModules: ['@nuxtjs/vuetify'],
+}
