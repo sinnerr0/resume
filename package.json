@@ -1,0 +1,30 @@
+{
+  "name": "resume",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nuxt",
+    "gen": "nuxt generate"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sinnerr0/resume.git"
+  },
+  "keywords": [
+    "resume"
+  ],
+  "author": "sinnerr0@gmail.com",
+  "license": "None",
+  "bugs": {
+    "url": "https://github.com/sinnerr0/resume/issues"
+  },
+  "homepage": "https://github.com/sinnerr0/resume#readme",
+  "dependencies": {
+    "nuxt": "^2.12.2"
+  },
+  "devDependencies": {
+    "node-sass": "^4.14.1",
+    "sass-loader": "^8.0.2"
+  }
+}
